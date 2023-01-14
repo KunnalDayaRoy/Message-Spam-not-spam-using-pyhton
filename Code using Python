@@ -1,0 +1,70 @@
+import pandas as pd                                                                                                                    #pandas - data Analysis Library
+import numpy as np                                                                                                                     #Numeric Python(numpy)
+
+from sklearn.feature_extraction.text import CountVectorizer                                                                          #scikit-learn library
+
+'''CountVectorizer- used to transform a given text into a vector on the basis of the frequency (count) of each word that occurs in the entire text'''
+
+from sklearn.model_selection import train_test_split
+
+'''train_test_split() method is used to split our data into train and test sets features (X) and labels (y)'''
+
+
+from sklearn.naive_bayes import MultinomialNB                                                                                             #Multinomial Naive Bayes
+
+data = pd.read_csv('SPAM DATASET.csv')
+data = data[["v1", "v2"]]
+x = np.array(data["v2"])
+y = np.array(data["v1"])
+
+cv = CountVectorizer()
+X = cv.fit_transform(x)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
+
+clf = MultinomialNB()
+clf.fit(X_train,y_train)
+
+import tkinter as tk
+from tkinter import *
+from tkinter import messagebox
+
+spam = tk.Tk()
+spam.geometry('600x400')
+spam.title("END TO END SPAM DETECTION SYSTEM")
+spam.config(bg = '#6A5ACD')
+
+
+
+def Submit():
+    user = StringVar
+    user = u1.get()
+    if len(user) < 1:
+       messagebox.showerror("Error",'Please, Enter a valid statement!')                             #Error dialog box if no message entered by user
+       #print("Info",'Error, Enter a valid statement!')
+
+    else:
+        sample = u1.get()
+        data = cv.transform([sample]).toarray()
+        a = clf.predict(data)
+        spam.title(a)
+        
+        
+lw = Label(spam, text = "[Spam] or [Not Spam]" , bg = '#6A5ACD',font = ('Comic Sans MS', 16 ), fg = 'White' , relief = 'flat')
+lw.place( x = 170, y = 60)
+        
+lw = Label(spam, text = "Enter your Message or Email", bg = "#FFFAFA", font = ('Comic Sans MS', 10 ), fg = 'blue' , relief = 'solid')
+lw.place(x= 55, y=140)
+
+lw = Label(spam, text = "\tCreated with 💙👻" , bg = '#6A5ACD', font = ('Segoe Script', 16 ), fg = 'white' , relief = 'flat')
+lw.place(x = 80, y = 310)
+
+
+u1 = Entry (spam , bg = 'white', fg = 'blue')
+u1.place(x=265, y=140 ,width= 300 , height = 23)                                                                     #Message input field area
+
+
+b1 = Button (spam, text ='Submit' , bg = 'lavender', cursor='hand2', command = Submit, fg = 'blue' , relief = 'solid')       #Submit Button
+b1.place(x=518, y=175)
+
+spam.mainloop()
+
